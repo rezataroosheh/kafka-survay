@@ -56,22 +56,22 @@ This will allow you to examine the specific configuration for a topic or client.
 ## Some Important Topic options
 There are some important topic options:
 
-### num.partitions
+1. **num.partitions**
 The num.partitions parameter determines how many partitions a new topic is created with, primarily when automatic topic creation is enabled.
 
-### log.retention.ms
+2. **log.retention.ms**
 The amount of time after which messages may be deleted. There are log.retention.hours and log.retention.minutes but the recommended parameter to use is log.retention.ms.
 
-### log.retention.bytes
+3. **log.retention.bytes**
 Another way to expire messages is based on the total number of bytes of messages retained.
 
 ### Segment
 A segment is simply a collection of messages of a partition. Instead of storing all the messages of a partition in a single file (think of the log file analogy again), Kafka splits them into chunks called segments. Kafka will close a log segment either when the size limit is reached or when the time limit is reached, whichever comes first. There are some important options for segment:
 
-#### log.segment.bytes
+1. **log.segment.bytes**
 Once the log segment has reached the size specified by the log.segment.bytes parameter, which defaults to 1 GB, the log segment is closed and a new one is opened.
 
-#### log.segment.ms
+2. **log.segment.ms**
 specifies the amount of time after which a log segment should be closed. By default, there is no setting for "log.segment.ms", which results in only closing log segments by size.
 
 ## Brokers
@@ -92,26 +92,26 @@ When the leader for a partition is no longer available, one of the in-sync repli
 ### Some Important Broker options
 There are some important Kafka broker options:
 
-##### auto.create.topics.enable
+1. **auto.create.topics.enable**
 The default Kafka configuration specifies that the broker should automatically create a topic under the following circumstances:
 
 - When a producer starts writing messages to the topic
 - When a consumer starts reading messages from the topic
 - When any client requests metadata for the topic
 
-##### log.dirs
+2. **log.dirs**
 Kafka persists all messages to disk, and these log segments are stored in the directories specified in the "**log.dirs**" configuration.
 
-#### min.insync.replicas
+3. **min.insync.replicas**
 When a producer sets acks to "all" (or "-1"), the "**min.insync.replicas**" specifies the minimum number of replicas that must acknowledge a write for the write to be considered successful. If this minimum cannot be met, then the producer will raise an exception. In this way, we may have to choose between availability and consistency.
 
-##### default.replication.factor
+3. **default.replication.factor**
 Represents default replication factors for automatically created topics.
 
-##### broker.rack
+4. **broker.rack**
 The placement of replicas is also very important. By default, Kafka will make sure each replica for a partition is on a separate broker. However, in some cases, this is not safe enough. If all replicas for a partition are placed on brokers that are on the same rack and the top-of-rack switch misbehaves, you will lose the availability of the partition regardless of the replication factor. To protect against rack-level misfortune, we recommend placing brokers in multiple racks and using the "**broker.rack**" broker configuration parameter to configure the rack name for each broker.
 
-#### unclean.leader.election.enable
+5. **unclean.leader.election.enable**
 Indicates whether to enable replicas, not in the ISR set to be elected as a leader as the last resort, even though doing so may result in data loss. The default value is true.
 
 ## Producers
