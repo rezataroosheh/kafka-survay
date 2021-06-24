@@ -1,5 +1,5 @@
 # Short Survey on Apache Kafka
-This is a survey story about Apache Kafka. All phrases are quoted.
+This is a survey story about Apache Kafka. All phrases are quoted from references.
 
 Kafka is a distributed, partitioned, replicated commit log service. It is a publish-subscribe messaging system designed to solve this problem. It is often described as a "distributed commit log" or more recently as a "distributing streaming platform". Kafka was traditionally seen as a powerful message bus, capable of delivering streams of events but without processing or transformation capabilities. Kafka's reliable stream delivery capabilities make it a perfect source of data for stream-processing systems.
 
@@ -66,7 +66,7 @@ The amount of time after which messages may be deleted. There are log.retention.
 Another way to expire messages is based on the total number of bytes of messages retained.
 
 ### Segment
-A segment is simply a collection of messages of a partition. Instead of storing all the messages of a partition in a single file (think of the log file analogy again), Kafka splits them into chunks called segments. Kafka will close a log segment either when the size limit is reached or when the time limit is reached, whichever comes first. There are some important options for segment:
+A segment is simply a collection of messages of a partition. Instead of storing all the messages of a partition in a single file (think of the log file analogy again), Kafka splits them into chunks called segments. Kafka will close a log segment either when the size limit is reached or when the time limit is reached, whichever comes first. There are some important options for the segment:
 
 1. **log.segment.bytes**
 Once the log segment has reached the size specified by the log.segment.bytes parameter, which defaults to 1 GB, the log segment is closed and a new one is opened.
@@ -105,13 +105,13 @@ Kafka persists all messages to disk, and these log segments are stored in the di
 3. **min.insync.replicas**
 When a producer sets acks to "all" (or "-1"), the "**min.insync.replicas**" specifies the minimum number of replicas that must acknowledge a write for the write to be considered successful. If this minimum cannot be met, then the producer will raise an exception. In this way, we may have to choose between availability and consistency.
 
-3. **default.replication.factor**
+4. **default.replication.factor**
 Represents default replication factors for automatically created topics.
 
-4. **broker.rack**
+5. **broker.rack**
 The placement of replicas is also very important. By default, Kafka will make sure each replica for a partition is on a separate broker. However, in some cases, this is not safe enough. If all replicas for a partition are placed on brokers that are on the same rack and the top-of-rack switch misbehaves, you will lose the availability of the partition regardless of the replication factor. To protect against rack-level misfortune, we recommend placing brokers in multiple racks and using the "**broker.rack**" broker configuration parameter to configure the rack name for each broker.
 
-5. **unclean.leader.election.enable**
+6. **unclean.leader.election.enable**
 Indicates whether to enable replicas, not in the ISR set to be elected as a leader as the last resort, even though doing so may result in data loss. The default value is true.
 
 ## Producers
@@ -164,7 +164,7 @@ When multiple records are sent to the same partition, the producer will batch th
 controls the amount of time to wait for additional messages before sending the current batch.
 
 ### Idempotent Producer
-While a message is sent by the producer to the broker but due to some issue acknowledgment does not come back to the producer. Producer retries and sends the same message again. The Broker sends an acknowledgment to the producer and writes the message again to the topic partition.
+Due to some issue acknowledgment does not come back to the producer while a message is sent by the producer to the broker. Producer retries and sends the same message again. The Broker sends an acknowledgment to the producer and writes the message again to the topic partition.
 
 ![failed ack](img/failed-ack.png)
 
@@ -200,11 +200,11 @@ Kafka offers a single consumer abstraction that generalizes both of these by the
 ### Consumers in the same consumer group
 If all the consumer instances have the same consumer group, then this works just like a traditional queue balancing load over the consumers. By storing the offset of the last consumed message for each partition, either in Zookeeper or in Kafka itself, a consumer can stop and restart without losing its place. When a consumer subscribes to a topic can be assigned to partitions by brokers as:
 
-1. **Assigned to more than one partitions**: The number of consumers in the consumer group is less than the partitions. In this case, the brokers assign to some consumers more than one partitions.
+1. **Assigned to more than one partitions**: Consumers in a consumer group are less than the partitions. In this case, the brokers assign to some consumers more than one partitions.
 
 ![partitions more than one consumers](img/partitions-more-than-one-consumers.png)
 
-2. **Assigned to exact one partition**: The number of consumers in the consumer group is equal to the partitions. In this case, the brokers will assign partitions to consumers one by one.
+2. **Assigned to exact one partition**: Consumers in a consumer group are equal to the partitions. In this case, the brokers will assign partitions to consumers one by one.
 
 ![Partitions count equals to consumers count](img/partitions-count-equals-to-consumers-count.png)
 
@@ -231,7 +231,7 @@ This property enables a periodical commit of message offsets to the Zookeeper th
 2. **auto.commit.interval.ms**
 This property defines the frequency (in milliseconds) for the consumed offsets to get committed to ZooKeeper.
 3. **client.id**
-This can be any string, and will be used by the brokers to identify messages sent from the client. It is used in logging and metrics, and for quotas.
+This can be any string and will be used by the brokers to identify messages sent from the client. It is used in logging and metrics, and for quotas.
 
 ## Reliability Guarantees
 1. Kafka guarantees messages order in a partition.
